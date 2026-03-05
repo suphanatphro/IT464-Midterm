@@ -1,4 +1,8 @@
--- 1. สร้างตาราง students พร้อมเพิ่มฟิลด์โครงงานให้แตกต่าง [2]
+-- 1. สร้างฐานข้อมูลและใช้ฐานข้อมูลนักศึกษา
+CREATE DATABASE IF NOT EXISTS student_shifts;
+USE student_shifts;
+
+-- 2. สร้างตาราง students พร้อมเพิ่มฟิลด์โครงงานให้แตกต่าง
 CREATE TABLE IF NOT EXISTS students (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id VARCHAR(15) NOT NULL,
@@ -9,10 +13,10 @@ CREATE TABLE IF NOT EXISTS students (
     shift_status VARCHAR(50) DEFAULT 'NA'
 );
 
--- 2. เพิ่มข้อมูลจำลองโดยเน้นข้อมูลนักศึกษา [2, 3]
+-- 3. เพิ่มข้อมูลจำลองโดยเน้นข้อมูลนักศึกษา
 -- แถวแรก: ข้อมูลของผู้สอบ (นักศึกษาต้องเปลี่ยนเป็นข้อมูลจริงของตนเอง)
 INSERT INTO students (student_id, full_name, username, email, project_name, shift_status) VALUES 
-('ใส่รหัสนศ.ของคุณ', 'ใส่ชื่อ-นามสกุลของคุณ', 'ใส่ชื่อบัญชีของคุณ', 'ใส่ชื่ออีเมลของคุณ', 'Web Administration', 'Morning Shift');
+('1660703552', 'Suphanat Phromwong', 'suphanat.phro', 'suphanat.phro@bumail.net', 'Web Administration', 'Morning Shift');
 
 -- ข้อมูลจำลองอื่นๆ เพื่อความสวยงาม
 INSERT INTO students (student_id, full_name, username, email, project_name, shift_status) VALUES 

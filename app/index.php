@@ -1,12 +1,11 @@
 <?php
 // 1. กำหนดค่าการเชื่อมต่อฐานข้อมูลโดยดึงชื่อจาก .env [5]
-$host = '___________'; // แก้ไขให้ตรงกับค่าทีอยู่ใน Docker Compose หรือ .env
-$user = '___________'; // แก้ไขให้ตรงกับค่าที่อยู่ใน Docker Compose หรือ .env
-$db   = '___________'; // แก้ไขให้ตรงกับค่าที่อยู่ใน Docker Compose หรือ .env
+$host = 'db'; // แก้ไขให้ตรงกับค่าทีอยู่ใน Docker Compose หรือ .env
+$user = 'root'; // แก้ไขให้ตรงกับค่าที่อยู่ใน Docker Compose หรือ .env
+$db   = 'student_shifts'; // แก้ไขให้ตรงกับค่าที่อยู่ใน Docker Compose หรือ .env
 
 // 2. กฎเหล็กด้านความปลอดภัย: อ่านรหัสผ่านจาก Docker Secret แทนการเขียนไว้ในโค้ด [7]
-$secret_path = '/run/secrets/db_pass';
-$pass = trim(file_get_contents($secret_path));
+$pass = getenv('MYSQL_ROOT_PASSWORD');
 
 // 3. เริ่มการเชื่อมต่อด้วย mysqli [8]
 $conn = new mysqli($host, $user, $pass, $db);
@@ -14,6 +13,18 @@ $conn = new mysqli($host, $user, $pass, $db);
 // ตรวจสอบการเชื่อมต่อ
 if ($conn->connect_error) {
     die("<h2 style='color:red;'>❌ Connection Failed: " . $conn->connect_error . "</h2>");
+}
+
+// Retry connection up to 10 times with 2-second delays
+$attempts = 0;
+while ($conn->connect_error && $attempts < 10) {
+    sleep(2); // รอ 2 วินาที
+    $conn = new mysqli($host, $user, $pass, $db);
+    $attempts++;
+}
+
+if ($conn->connect_error) {
+    die("Connection failed after retries: " . $conn->connect_error);
 }
 ?>
 
